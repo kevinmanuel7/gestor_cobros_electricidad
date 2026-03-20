@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Mensual</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center">📅 Resumen del Mes: <span th:text="${mesActual}"></span></h2>
+        
+        <div class="row mb-4 justify-content-center">
+            <div class="col-md-6">
+                <form action="/mensual" method="get" class="d-flex gap-2">
+                    <input type="month" name="mesSeleccionado" class="form-control" required>
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </form>
+                <small class="text-muted">Selecciona el mes que deseas revisar.</small>
+            </div>
+        </div>
+        <div class="table-responsive mt-4">
+            <table class="table table-bordered shadow-sm">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Casa</th>
+                        <th>Arrendatario</th>
+                        <th>Lectura Medidor</th>
+                        <th>Consumo (kWh)</th>
+                        <th>Total Cobro (CLP)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="l : ${lecturasMes}">
+                        <td class="text-center" th:text="${l.casa.id}"></td>
+                        <td th:text="${l.casa.nombreArrendatario}"></td>
+                        <td class="text-center" th:text="${l.lecturaMedidor}"></td>
+                        <td class="text-center" th:text="${l.consumoKwh}"></td>
+                        <td class="text-end fw-bold text-primary" 
+                            th:text="${'$ ' + #numbers.formatInteger(l.montoTotal, 3, 'POINT')}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <a href="/menu" class="btn btn-secondary w-100 mt-3">Volver al Menú</a>
+    </div>
+</body>
+</html>
