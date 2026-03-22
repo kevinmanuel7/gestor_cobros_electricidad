@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.kevin.medidor.model.Casa;
 import com.kevin.medidor.model.LecturaMensual;
@@ -20,6 +21,12 @@ public class MedidorController {
 
     @Autowired
     private LecturaRepository lecturaRepo;
+
+    @Value("${ADMIN_USER:admin}")
+    private String adminUser;
+
+    @Value("${ADMIN_PASS:1234}")
+    private String adminPass;
 
     // --- SEGURIDAD: MÉTODO AUXILIAR ---
     // Verifica si el usuario pasó por el login
@@ -41,7 +48,7 @@ public class MedidorController {
                                 Model model) {
         
         // Verificamos con los nuevos nombres de variable
-        if ("admin".equals(usuario) && "1234".equals(clave)) {
+        if (adminUser.equals(usuario) && adminPass.equals(clave)) {
             session.setAttribute("usuarioLogueado", usuario); 
             return "redirect:/menu";
         } else {
