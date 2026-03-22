@@ -35,12 +35,14 @@ public class MedidorController {
 
     // VALIDACIÓN
     @PostMapping("/login")
-    public String procesarLogin(@RequestParam String username, 
-                                @RequestParam String password, 
+    public String procesarLogin(@RequestParam String usuario,  // Antes decía username
+                                @RequestParam String clave,    // Antes decía password
                                 HttpSession session, 
                                 Model model) {
-        if ("admin".equals(username) && "1234".equals(password)) {
-            session.setAttribute("usuarioLogueado", username); 
+        
+        // Verificamos con los nuevos nombres de variable
+        if ("admin".equals(usuario) && "1234".equals(clave)) {
+            session.setAttribute("usuarioLogueado", usuario); 
             return "redirect:/menu";
         } else {
             model.addAttribute("error", "Usuario o contraseña incorrectos");
