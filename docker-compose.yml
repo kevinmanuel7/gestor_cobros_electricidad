@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # 1. EL CONTENEDOR DE LA BASE DE DATOS
+  base_de_datos:
+    image: mysql:8.0
+    container_name: medidores_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: medidores_bd
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: '12345'
+      MYSQL_ROOT_PASSWORD: 'root_password_segura'
+    ports:
+      - "3307:3306" # Esto te permitirá conectarte desde tu MySQL Workbench local!
+    volumes:
+      - datos_mysql:/var/lib/mysql # Este es el túnel que guarda tus datos para siempre
+
+  # 2. EL CONTENEDOR DE TU PROGRAMA SPRING BOOT
+  programa_java:
+    build: .
+    container_name: medidores_app
+    restart: always
+    ports:
+      - "8080:8080" # El puerto por donde entrarás desde el iPhone
+    depends_on:
+      - base_de_datos
+    environment:
+      # Aquí inyectamos las variables que pide tu application.properties
+      MYSQL_URL: mysql://base_de_datos:3306/medidores_bd?allowPublicKeyRetrieval=true&useSSL=false
+      MYSQLUSER: admin
+      MYSQLPASSWORD: '12345'
+
+# Declaramos el volumen (disco duro virtual)
+volumes:
+  datos_mysql:
